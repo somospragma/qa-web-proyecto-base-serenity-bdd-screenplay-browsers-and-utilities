@@ -1,11 +1,11 @@
-# project-standards-automation
+# proyecto-base-serenity-bdd-screenplay-browsers-and-utilities
 
 
 ## Name
-Proyecto de estandares de Automatización - Pragma
+Proyecto de estandares de Automatización y utilidades con serenity bdd y screenplay
 
 ## Description
-This project aims to establish a standard base for test automation with different technologies such as Selenium, Appium, Serenity Web and Rest under a Screenplay Pattern or POM design, which can be used as a guide in different projects.
+This project aims to establish a standard base for test automation with different technologies such as Serenity Web under a Screenplay Pattern design, which can be used as a guide in different projects.
 
 
 ## ✅ Technologies
@@ -69,6 +69,7 @@ gradle command... -Denvironment=prod
     - The default environment will be used if no other value is provided
     - Could modify the environment urls in .../test/resources/serenity.conf
 
+
 ## **Run tests in different browser:**
 ```
 gradle command... -Dwebdriver.driver=chrome
@@ -78,6 +79,7 @@ gradle command... -Dwebdriver.driver=edge
 ### Note:
     - The chrome browser will be used if no other value is provided
     - Could add browser in ./src/test/java/co/com/pragma/stepdefinitions/SerenityWebHooks.java
+
 
 ## Collaborate with your team
 
