@@ -22,7 +22,7 @@ public class LoginStepDefinitions {
     String authenticateCode;
 
     @Given("que {string} esta en el Login Page de Tienda Pragma")
-    public void queUsuarioQuiereIniciarSesionEnMapaDeCrecimiento(String actorName) {
+    public void queUsuarioEstaEnLoginPage(String actorName) {
 
         actor.assignName(actorName);
 
@@ -53,7 +53,7 @@ public class LoginStepDefinitions {
     }
 
     @Then("el usuario visualiza el home de Mision Match")
-    public void elUsuarioVisualizaElHomeDeCrezi() {
+    public void elUsuarioVisualizaElHomeOfPage() {
         actor.attemptsTo(
                 WaitUntil.the(LoginPage.ESCRITORIO_BTN, isVisible()).forNoMoreThan(15).seconds()
         );
