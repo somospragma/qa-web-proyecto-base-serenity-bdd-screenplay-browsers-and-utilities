@@ -7,6 +7,28 @@ Proyecto de estandares de Automatización y utilidades con serenity bdd y screen
 ## Description
 This project aims to establish a standard base for test automation with different technologies such as Serenity Web under a Screenplay Pattern design, which can be used as a guide in different projects.
 
+## Consideraciones
+    - Para hacer uso de la funcionalidad de prueba que implementa la utilidad de Base de Datos es importante 
+    que se instacie una Base de datos y se configura en el archivo de configuración ubicado en:
+        ./src/main/resources/configs/congig.properties
+
+
+    - La funcionalidad de prueba que implementa la utilidad de manejo de documentos de Google Sheet hace uso
+    de un documento de Google Sheet ubicado en el drive de Pragma, las credenciasles del API de Google se encuentran
+    en: 
+        ./src/main/resources/credenciales.json
+    las cuales fueron generadas por un API de google creado bajo una cuenta de Pragma. Si desea ejecutar un documento tambien 
+    dentro del drive de Pragma solo cambie el ID del documento y cree un documento con 
+        |correo | contraseña | secret de google authenticator |
+    
+    A su vez, el manejo de codigos de autenticacion de GoogleAuthenticator OTP tambien hace uso del documento de GoogleSheet,
+    por lo cual es importante exista el documento con la información de acceso.
+    De lo contrario solo use la implementacion dentro del feature Login.feature como un ejemplo
+
+
+    Dadas las consideraciones anteriores, la implementacion de las utilidades solo se encuentran expuestas a modo 
+    de ejemplo y unicamente funcionaran si se hacen las configuraciones pertinentes.
+
 
 ## ✅ Technologies
 ### This project required:

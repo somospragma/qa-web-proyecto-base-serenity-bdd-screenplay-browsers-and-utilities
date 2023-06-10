@@ -21,7 +21,7 @@ public class LoginStepDefinitions {
 
     String authenticateCode;
 
-    @Given("que {string} esta en el Login Page de Mision Match")
+    @Given("que {string} esta en el Login Page de Tienda Pragma")
     public void queUsuarioQuiereIniciarSesionEnMapaDeCrecimiento(String actorName) {
 
         actor.assignName(actorName);
