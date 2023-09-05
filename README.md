@@ -102,6 +102,14 @@ gradle command... -Dwebdriver.driver=edge
     - The chrome browser will be used if no other value is provided
     - Could add browser in ./src/test/java/co/com/pragma/stepdefinitions/SerenityWebHooks.java
 
+## Image Comparison
+### About:
+This is a library available to perform absolute comparison tests between images. Note that the concept of absolute comparison is based on the evaluation of pixel-by-pixel values between the images involved, which brings limitations to the testing.
+### Source
+https://github.com/romankh3/image-comparison
+
+
+
 
 ## Collaborate with your team
 
@@ -131,8 +139,8 @@ If you have ideas for releases in the future, it is a good idea to list them in 
 
 ## Authors and acknowledgment
 
-| [<img src="https://gitlab.com/uploads/-/system/user/avatar/13437423/avatar.png?width=400" width=115><br><sub>Mauro L. Ibarra P.</sub>](https://gitlab.com/mauro.ibarrap) <br/> | [<img src="https://secure.gravatar.com/avatar/6058d585f70156b4559f8e32b753252b?s=800&d=identicon" width=115><br><sub>V. Manuel Soto</sub>](https://gitlab.com/victor.soto1) |
-|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| [<img src="https://gitlab.com/uploads/-/system/user/avatar/13437423/avatar.png?width=400" width=115><br><sub>Mauro L. Ibarra P.</sub>](https://gitlab.com/mauro.ibarrap) <br/> | [<img src="https://secure.gravatar.com/avatar/6058d585f70156b4559f8e32b753252b?s=800&d=identicon" width=115><br><sub>V. Manuel Soto</sub>](https://gitlab.com/victor.soto1) | [<img src="https://gitlab.com/uploads/-/system/user/avatar/15033064/avatar.png?width=400" width=115><br><sub>Cristian F. Roa C.</sub>](https://gitlab.com/cristian.roa) <br/> |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 ## License
 Open source project.
