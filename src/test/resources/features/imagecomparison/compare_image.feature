@@ -7,7 +7,7 @@ Feature: Compare Image
      SIZE_MISMATCH: the images have different resolution
   """
 
-  @Debug
+#  @Debug
   Scenario Outline: Successful MisMatch comparison
     Given the user has a captured image
     When he apply image comparison the <actual> image with <expected> image
@@ -35,7 +35,7 @@ Feature: Compare Image
       | actual                           | expected                           |
       | "src/test/resources/data/p3.png" | "src/test/resources/data/p3_1.png" |
 
-
+  @Debug
   Scenario Outline: Successful apply image comparison in acceptance test
     Given the user navigate to pragma store
     And he takes a screenshot of main page

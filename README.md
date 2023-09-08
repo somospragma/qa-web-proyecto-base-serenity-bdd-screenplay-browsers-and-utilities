@@ -64,17 +64,17 @@ gradle clean test -Dcucumber.options="--tags '@someTag or @someTag'" -Dcontext=c
 ```
 ### ejemplo
 ```
-gradle clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" -Dcontext=chrome -Dwebdriver.driver=chrome
+./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.CompareImageRunner" -Dcontext=chrome '-Dwebdriver.driver=chrome'
 ```
 
 ##  🛠️ Run tests Firefox gradle:
 ```
-gradle clean test -Dcontext=firefox -Dwebdriver.driver=firefox
-gradle test --tests "co.com.pragma.runners.LoginRunner" -Dcontext=firefox -Dwebdriver.driver=firefox
+./gradlew clean test -Dcontext=firefox '-Dwebdriver.driver=firefox'
+./gradlew test --tests "co.com.pragma.runners.LoginRunner" '-Dcontext=firefox -Dwebdriver.driver=firefox'
 ```
 ### ejemplo
 ```
-gradle clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" -Dcontext=firefox -Dwebdriver.driver=firefox
+./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" '-Dcontext=firefox -Dwebdriver.driver=firefox'
 ```
 
 
