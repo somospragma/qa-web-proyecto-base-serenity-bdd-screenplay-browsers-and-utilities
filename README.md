@@ -107,6 +107,11 @@ gradle command... -Dwebdriver.driver=edge
 This is a library available to perform absolute comparison tests between images. Note that the concept of absolute comparison is based on the evaluation of pixel-by-pixel values between the images involved, which brings limitations to the testing.
 ### Source
 https://github.com/romankh3/image-comparison
+### Use of archetype and image comparison classes
+To use this implementation in your projects, you need to create the following folders:
+1. create this path : /resources/data/screenshot - in this route you will be able to save the screenshot took by utility class called *ScreenshotProvider*.
+2. in  /resources/data/ : in this path you will be able to save your image to test the scenarios in *compare_image.feature*
+3. You need to create this path : /resources/results - to save the results of image comparison Task 
 
 
 
