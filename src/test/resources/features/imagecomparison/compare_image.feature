@@ -15,7 +15,7 @@ Feature: Compare Image
     Examples:
       | actual                               | expected                               | result     |
       | "src/test/resources/data/actual.png" | "src/test/resources/data/expected.png" | "MISMATCH" |
-#      | "src/test/resources/data/p1.png"     | "src/test/resources/data/p1_1.png"     | "SIZE_MISMATCH" |
+      | "src/test/resources/data/p1.png"     | "src/test/resources/data/p1_1.png"     | "SIZE_MISMATCH" |
 
 
   Scenario Outline: Do comparison by excluded areas and set minimal area to evaluate
