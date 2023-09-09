@@ -3,6 +3,7 @@ package co.com.pragma.stepdefinitions.imagecomparison;
 import co.com.pragma.navigation.NavigateTo;
 import co.com.pragma.questions.CompareImageResult;
 import co.com.pragma.tasks.CompareImage;
+import co.com.pragma.tasks.GotoWebElement;
 import com.github.romankh3.image.comparison.model.Rectangle;
 import io.cucumber.java.Before;
 import io.cucumber.java.en.And;
@@ -16,6 +17,7 @@ import org.hamcrest.core.IsEqual;
 import java.util.ArrayList;
 import java.util.List;
 
+import static co.com.pragma.userinterfaces.pragma.LoginPage.BOTON_IR_DE_COMPRAS;
 import static net.serenitybdd.screenplay.GivenWhenThen.seeThat;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorCalled;
 import static net.serenitybdd.screenplay.actors.OnStage.theActorInTheSpotlight;
@@ -90,7 +92,9 @@ public class CompareImageStepDefinitions {
 
     @And("he takes a screenshot of main page")
     public void heTakesAScreenshotOfMainPage() {
-
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                GotoWebElement.lookingFor(BOTON_IR_DE_COMPRAS)
+        );
     }
 
 

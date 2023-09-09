@@ -13,8 +13,8 @@ Feature: Compare Image
     When he apply image comparison the <actual> image with <expected> image
     Then he should see that the result state is <result>
     Examples:
-      | actual                               | expected                               | result          |
-      | "src/test/resources/data/actual.png" | "src/test/resources/data/expected.png" | "MISMATCH"      |
+      | actual                               | expected                               | result     |
+      | "src/test/resources/data/actual.png" | "src/test/resources/data/expected.png" | "MISMATCH" |
 #      | "src/test/resources/data/p1.png"     | "src/test/resources/data/p1_1.png"     | "SIZE_MISMATCH" |
 
 
@@ -42,5 +42,5 @@ Feature: Compare Image
     When he apply image comparison the <actual> image with <expected> image
     Then he should see that the result state is "MATCH"
     Examples:
-      | actual | expected |
-      | ""     | ""       |
+      | actual                                           | expected                               |
+      | "src/test/resources/data/screenshot/capture.png" | "src/test/resources/data/E2E_test.png" |

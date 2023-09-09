@@ -18,4 +18,6 @@ public class LoginPage extends PageObject {
 
  public static final Target ESCRITORIO_BTN = Target.the("Titulo mapa de crecimiento que se encuentra al ingresar a la página").located(By.xpath("//a[contains(text(),'Escritorio')]"));
 
+ public static final Target BOTON_IR_DE_COMPRAS = Target.the("Boton para ir de compras").locatedBy("//*[text()='Ir de compras']");
+
 }
