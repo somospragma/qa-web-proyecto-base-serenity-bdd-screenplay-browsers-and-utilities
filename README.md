@@ -64,17 +64,17 @@ gradle clean test -Dcucumber.options="--tags '@someTag or @someTag'" -Dcontext=c
 ```
 ### ejemplo
 ```
-gradle clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" -Dcontext=chrome -Dwebdriver.driver=chrome
+./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.CompareImageRunner" -Dcontext=chrome '-Dwebdriver.driver=chrome'
 ```
 
 ##  🛠️ Run tests Firefox gradle:
 ```
-gradle clean test -Dcontext=firefox -Dwebdriver.driver=firefox
-gradle test --tests "co.com.pragma.runners.LoginRunner" -Dcontext=firefox -Dwebdriver.driver=firefox
+./gradlew clean test -Dcontext=firefox '-Dwebdriver.driver=firefox'
+./gradlew test --tests "co.com.pragma.runners.LoginRunner" '-Dcontext=firefox -Dwebdriver.driver=firefox'
 ```
 ### ejemplo
 ```
-gradle clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" -Dcontext=firefox -Dwebdriver.driver=firefox
+./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" '-Dcontext=firefox -Dwebdriver.driver=firefox'
 ```
 
 
@@ -101,6 +101,19 @@ gradle command... -Dwebdriver.driver=edge
 ### Note:
     - The chrome browser will be used if no other value is provided
     - Could add browser in ./src/test/java/co/com/pragma/stepdefinitions/SerenityWebHooks.java
+
+## Image Comparison
+### About:
+This is a library available to perform absolute comparison tests between images. Note that the concept of absolute comparison is based on the evaluation of pixel-by-pixel values between the images involved, which brings limitations to the testing.
+### Source
+https://github.com/romankh3/image-comparison
+### Use of archetype and image comparison classes
+To use this implementation in your projects, you need to create the following folders:
+1. create this path : /resources/data/screenshot - in this route you will be able to save the screenshot took by utility class called *ScreenshotProvider*.
+2. in  /resources/data/ : in this path you will be able to save your image to test the scenarios in *compare_image.feature*
+3. You need to create this path : /resources/results - to save the results of image comparison Task 
+
+
 
 
 ## Collaborate with your team
@@ -131,8 +144,8 @@ If you have ideas for releases in the future, it is a good idea to list them in 
 
 ## Authors and acknowledgment
 
-| [<img src="https://gitlab.com/uploads/-/system/user/avatar/13437423/avatar.png?width=400" width=115><br><sub>Mauro L. Ibarra P.</sub>](https://gitlab.com/mauro.ibarrap) <br/> | [<img src="https://secure.gravatar.com/avatar/6058d585f70156b4559f8e32b753252b?s=800&d=identicon" width=115><br><sub>V. Manuel Soto</sub>](https://gitlab.com/victor.soto1) |
-|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
+| [<img src="https://gitlab.com/uploads/-/system/user/avatar/13437423/avatar.png?width=400" width=115><br><sub>Mauro L. Ibarra P.</sub>](https://gitlab.com/mauro.ibarrap) <br/> | [<img src="https://secure.gravatar.com/avatar/6058d585f70156b4559f8e32b753252b?s=800&d=identicon" width=115><br><sub>V. Manuel Soto</sub>](https://gitlab.com/victor.soto1) | [<img src="https://gitlab.com/uploads/-/system/user/avatar/15033064/avatar.png?width=400" width=115><br><sub>Cristian F. Roa C.</sub>](https://gitlab.com/cristian.roa) <br/> |
+|:------------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:---------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|:-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------:|
 
 ## License
 Open source project.

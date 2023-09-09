@@ -16,8 +16,10 @@ import com.google.api.services.sheets.v4.model.ValueRange;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Array;
 import java.security.GeneralSecurityException;
 
+import java.util.Arrays;
 import java.util.List;
 
 public class GoogleSheetsReader {
@@ -44,7 +46,7 @@ public class GoogleSheetsReader {
         InputStream in = GoogleSheetsReader.class.getResourceAsStream("/credenciales.json");
         GoogleClientSecrets clientSecrets = GoogleClientSecrets.load(GsonFactory.getDefaultInstance(), new InputStreamReader(in));
 
-        List<String> scopes = List.of(SheetsScopes.SPREADSHEETS_READONLY);
+        List<String> scopes = Arrays.asList(SheetsScopes.SPREADSHEETS_READONLY);
 
         GoogleAuthorizationCodeFlow flow = new GoogleAuthorizationCodeFlow.Builder(GoogleNetHttpTransport.newTrustedTransport(), GsonFactory.getDefaultInstance(), clientSecrets, scopes)
                 .setDataStoreFactory(new FileDataStoreFactory(new java.io.File("CredencialesUser")))

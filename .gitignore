@@ -11,6 +11,7 @@ ted by https://www.toptal.com/developers/gitignore/api/intellij+all
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+# *.png
 
 # AWS User-specific
 .idea/**/aws.xml
