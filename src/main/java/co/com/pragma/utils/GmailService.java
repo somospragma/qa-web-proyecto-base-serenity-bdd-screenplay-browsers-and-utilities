@@ -104,13 +104,25 @@ public class GmailService {
 
     private static List<String> getBodies(MessagePart payload) {
         ArrayList<String> bodies = new ArrayList<>();
+        int bandera = 0;
         if (payload.getParts() != null) {
             for (MessagePart part : payload.getParts()) {
-                if (part.getParts() == null) continue;
-                for (MessagePart segmentedPart : part.getParts()) {
-                    if (segmentedPart.getBody().getSize() <= 0) continue;
-                    String body = new String(Base64.getUrlDecoder().decode(segmentedPart.getBody().getData()));
-                    bodies.add(body);
+                if (part.getParts() != null) {
+                    bandera=1;
+                    for (MessagePart segmentedPart : part.getParts()) {
+                        if (segmentedPart.getBody().getSize() >= 0) {
+                            String body = new String(Base64.getUrlDecoder().decode(segmentedPart.getBody().getData()));
+                            bodies.add(body);
+                        }
+                    }
+                }
+            }
+            if(bandera==0){
+                for (MessagePart part : payload.getParts()) {
+                    if (part.getBody().getSize() >= 0) {
+                        String body = new String(Base64.getUrlDecoder().decode(part.getBody().getData()));
+                        bodies.add(body);
+                    }
                 }
             }
         }

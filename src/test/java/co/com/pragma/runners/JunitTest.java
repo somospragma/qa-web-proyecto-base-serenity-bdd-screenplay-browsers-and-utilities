@@ -7,7 +7,10 @@ import co.com.pragma.utils.data.AppDB;
 import co.com.pragma.utils.data.ConexionGestorDB;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
+
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
@@ -24,21 +27,27 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
-import java.util.Date;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Locale;
+import java.util.*;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
+
+import org.apache.hc.client5.http.classic.methods.HttpGet;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
+import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
+import org.apache.hc.client5.http.impl.classic.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
 import org.junit.Test;
 
 import static co.com.pragma.utils.UtilConstants.*;
+import static java.util.logging.Logger.getAnonymousLogger;
 
 public class JunitTest {
 
@@ -191,7 +200,7 @@ public class JunitTest {
                         HttpRequest secondRequest = HttpRequest.newBuilder().uri(URI.create("https://api-tm.solucioneswc.com/api/message/" + email + "/" + messageId)).header("X-Tm-Token", "JQffcDVgzfrPa9ZPALch").build();
                         client.sendAsync(secondRequest, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body).thenAccept(secondResponseBody -> {
                             Pattern pattern = Pattern.compile(mensaje);
-                            Matcher matcher = pattern.matcher((CharSequence)secondResponseBody);
+                            Matcher matcher = pattern.matcher(secondResponseBody);
                             if (matcher.find()) {
                                 System.out.println("SI CONTINE EL MENSAJE");
                             } else {
@@ -214,6 +223,187 @@ public class JunitTest {
                 System.err.println("Se interrumpi\u00f3 el sue\u00f1o del hilo: " + e.getMessage());
             }
         }).join();
+    }
+
+    @Test
+    public void getCodeEmailTemporalGratis(){
+        String email = "presenteappqa";
+        String dominio = "dayrep.com";
+        String mensajeValidate = "Solicitaste restablecer tu contraseña";
+
+        for (int i = 0; i < 3; ++i) {
+            try {
+                // Hacer la solicitud GET a la página que contiene los correos electrónicos
+                CloseableHttpClient httpClient = HttpClients.createDefault();
+                HttpGet httpGet = new HttpGet("https://www.emailtemporalgratis.com/inbox/"+dominio+"/"+email+"/");
+                CloseableHttpResponse response = httpClient.execute(httpGet);
+
+                // Leer la respuesta como texto
+                BufferedReader reader = new BufferedReader(new InputStreamReader(response.getEntity().getContent()));
+                StringBuilder responseBody = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    responseBody.append(line);
+                }
+
+                // Parsear el HTML para obtener el message-id del último correo
+                Document document = Jsoup.parse(responseBody.toString());
+
+                // Expresión regular para extraer los detalles de los correos electrónicos
+                String regexId = "message-(\\d+)";
+//            String regexDate = "<dt>Recibido:</dt>\\s*<dd>(.*?)</dd>";
+                String regexDate = "<dt>Recibido:</dt>\\s*<dd>(.*?)\\s*(?:<span[^>]*>.*?</span>)?</dd>";
+
+                Pattern patternId = Pattern.compile(regexId);
+                Pattern patternDate = Pattern.compile(regexDate);
+
+                Matcher matcherId = patternId.matcher(responseBody.toString());
+                Matcher matcherDate = patternDate.matcher(responseBody.toString());
+
+                // Variables para almacenar los detalles del último correo recibido
+                String lastMessageId = null;
+                String lastDateStr = null;
+
+                // Obtener los detalles del último correo recibido
+                List<String> messageIds = new ArrayList<>();
+                while (matcherId.find()) {
+                    String messageId = matcherId.group(1);
+                    messageIds.add(messageId);
+                }
+
+                List<String> dates = new ArrayList<>();
+                while (matcherDate.find()) {
+                    String date = matcherDate.group(1).trim();
+                    //System.out.println("fecha:" + date);
+                    dates.add(date);
+                }
+                //System.out.println("fechas: " + dates);
+                lastDateStr = dates.get(0);
+                // Eliminar la parte "at" del formato de fecha del HTML
+                lastDateStr = lastDateStr.replace(" at", "");
+                lastDateStr =parseDate(lastDateStr);
+
+                // Obtener la hora actual del sistema en formato "EEE, MMM dd, yyyy 'at' hh:mm a zzz"
+//                LocalDateTime targetDate = LocalDateTime.now(ZoneOffset.UTC); // Obteniendo la fecha y hora actual en UTC
+                LocalDateTime targetDate = LocalDateTime.of(2023, 9, 19, 20, 20);
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("EEE, MMM dd, yyyy hh:mm a zzz", Locale.ENGLISH);
+
+                LocalDateTime messageDate = LocalDateTime.parse(lastDateStr, formatter);
+
+                System.out.println("Fecha actual del sistema: " + targetDate);
+
+                // Comparar las fechas
+                if (messageDate.isEqual(targetDate) || messageDate.isAfter(targetDate)) {
+                    System.out.println("La fecha del HTML es mayor que la fecha actual del sistema.");
+
+                    if (!messageIds.isEmpty()) {
+                        lastMessageId = messageIds.get(0);
+                        System.out.println("Id del ultimo correo: " + lastMessageId);
+
+                        // Construir la URL del mensaje específico
+                        String messageUrl = "https://www.emailtemporalgratis.com/email/dayrep.com/presenteappqa/message-" + lastMessageId + "/";
+                        System.out.println("segunda URL: " + messageUrl);
+
+                        // Hacer una nueva solicitud GET para obtener el contenido del mensaje
+                        HttpGet messageGet = new HttpGet(messageUrl);
+                        CloseableHttpResponse messageResponse = httpClient.execute(messageGet);
+                        BufferedReader messageReader = new BufferedReader(new InputStreamReader(messageResponse.getEntity().getContent()));
+                        StringBuilder messageBody = new StringBuilder();
+                        String messageLine;
+                        while ((messageLine = messageReader.readLine()) != null) {
+                            messageBody.append(messageLine);
+                        }
+                        //Validar texto dentro del mensaje
+                        Pattern pattern = Pattern.compile(mensajeValidate);
+                        Matcher matcher = pattern.matcher(messageBody.toString());
+                        if (matcher.find()) {
+                            System.out.println("El mensaje si contiene el texto a validar");
+                        } else {
+                            System.out.println("No se pudo encontrar el mensaje esperado en la respuesta del correo.");
+                        }
+
+                        // Parsear el contenido del mensaje para extraer el código OTP
+                        Document messageDocument = Jsoup.parse(messageBody.toString());
+                        //System.out.println("segundo response: " + messageDocument);
+                        Element codeElement = messageDocument.select("span").first();
+
+                        if (codeElement != null) {
+                            String otp = codeElement.text();
+                            System.out.println("Código OTP: " + otp);
+                            break;
+                        } else {
+                            System.out.println("No se encontró ningún código OTP en el mensaje.");
+                        }
+                    } else {
+                        System.out.println("No se encontraron Message IDs.");
+                    }
+                } else {
+                    System.out.println("La fecha del HTML es anterior a la fecha actual del sistema.");
+                }
+
+                // Cerrar recursos
+                httpClient.close();
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
+    }
+
+    @Test
+    public void  borrar(){
+        String lastDateStr = "Fri, Sep 29, 2023 11:01 PM UTC";
+
+        // Definir el patrón de formato de hora y minutos
+        Pattern timePattern = Pattern.compile("(\\d{1,2}):(\\d{2}) (AM|PM)");
+        Matcher matcher = timePattern.matcher(lastDateStr);
+
+        if (matcher.find()) {
+            // Obtener la hora y los minutos encontrados
+            String hourStr = matcher.group(1);
+            String minuteStr = matcher.group(2);
+            String amPm = matcher.group(3);
+
+            // Convertir a números y agregar cero a la izquierda si es necesario
+            int hour = Integer.parseInt(hourStr);
+            if (hour < 10) {
+                hourStr = "0" + hourStr;
+            }
+
+            // Corregir la cadena de fecha y hora
+            String correctedDateTime = lastDateStr.replaceFirst("\\d{1,2}:\\d{2} (AM|PM)", hourStr + ":" + minuteStr + " " + amPm);
+
+            // Imprimir la fecha y hora analizada
+            System.out.println(correctedDateTime);
+        } else {
+            System.out.println("No se encontró la hora en el formato esperado.");
+        }
+    }
+
+    private String parseDate(String dateIn){
+
+        // Definir el patrón de formato de hora y minutos
+        Pattern timePattern = Pattern.compile("(\\d{1,2}):(\\d{2}) (AM|PM)");
+        Matcher matcher = timePattern.matcher(dateIn);
+
+        if (matcher.find()) {
+            // Obtener la hora y los minutos encontrados
+            String hourStr = matcher.group(1);
+            String minuteStr = matcher.group(2);
+            String amPm = matcher.group(3);
+
+            // Convertir a números y agregar cero a la izquierda si es necesario
+            int hour = Integer.parseInt(hourStr);
+            if (hour < 10) {
+                hourStr = "0" + hourStr;
+            }
+
+            // Corregir la cadena de fecha y hora
+            String correctedDateTime = dateIn.replaceFirst("\\d{1,2}:\\d{2} (AM|PM)", hourStr + ":" + minuteStr + " " + amPm);
+            return correctedDateTime;
+        } else {
+            return null;
+        }
     }
 
 }
