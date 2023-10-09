@@ -39,7 +39,7 @@ Feature: Compare Image
   Scenario Outline: Successful apply image comparison in acceptance test
     Given the user navigate to pragma store
     And he takes a screenshot of main page
-    When he apply image comparison the <actual> image with <expected> image
+    When he apply image custom comparison the <actual> image with <expected> image
     Then he should see that the result state is "MATCH"
     Examples:
       | actual                                           | expected                               |

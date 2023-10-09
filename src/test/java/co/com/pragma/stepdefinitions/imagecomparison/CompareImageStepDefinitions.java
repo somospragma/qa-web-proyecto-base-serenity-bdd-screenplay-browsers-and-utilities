@@ -97,5 +97,24 @@ public class CompareImageStepDefinitions {
         );
     }
 
+    @When("he apply image custom comparison the {string} image with {string} image")
+    public void heApplyImageCustomComparisonTheImageWithImage(String actual, String expected) {
+        //Create Customized parameters
+        List<Rectangle> excludedAreas = new ArrayList<>(); //object to excluded areas in comparison
+        excludedAreas.add(new Rectangle(0, 471, 1900, 833));
+        Rectangle minRectangle = new Rectangle(0,0,245,40);//an area example
+
+        OnStage.theActorInTheSpotlight().attemptsTo(
+                CompareImage.doComparison(actual, expected)
+                        .configureImageComparison(imageComparison -> {  //set your customized parameters
+                            imageComparison.setExcludedAreas(excludedAreas);
+                            imageComparison.setDrawExcludedRectangles(true);
+                            imageComparison.setMinimalRectangleSize(minRectangle.size());
+                        })
+        );
+
+    }
+
+
 
 }

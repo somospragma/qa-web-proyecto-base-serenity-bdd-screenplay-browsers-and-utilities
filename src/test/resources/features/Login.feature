@@ -7,7 +7,8 @@ Feature: Login
     Then el usuario visualiza el home de Mision Match
 
     Examples:
-      | RowNumber |mobileVerifyActive|
-      | 1         |false             |
+      | RowNumber                 | mobileVerifyActive |
+      | 1                         | false              |
 
 
+     
