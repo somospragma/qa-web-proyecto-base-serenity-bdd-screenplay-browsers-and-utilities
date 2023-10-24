@@ -111,7 +111,7 @@ public class JunitTest {
     private String verificationCode;
     @Test
     public void getCodeOfMailCorreoTemporal() {
-        String email = "presente-pragma-app@cikue.com";
+        String email = "ejemplo@cikue.com";
         int attempts = 10;
         int waitAttemptSeconds = 3;
         LocalDateTime targetDate = LocalDateTime.now(ZoneOffset.UTC);
@@ -176,7 +176,7 @@ public class JunitTest {
     @Test
     public void validateMessageCorreoTemporal() {
         String mensaje = "Solicitaste restablecer tu contrase\u00f1a";
-        String email = "presente-pragma-app@cikue.com";
+        String email = "ejemplo@cikue.com";
         HttpClient client = HttpClient.newHttpClient();
         HttpRequest request = HttpRequest.newBuilder().uri(URI.create("https://api-tm.solucioneswc.com/api/get-messages/accepted/" + email + "/18000?password=pragma")).header("X-Tm-Token", "JQffcDVgzfrPa9ZPALch").build();
         client.sendAsync(request, HttpResponse.BodyHandlers.ofString()).thenApply(HttpResponse::body).thenAccept(responseBody -> {
@@ -224,7 +224,7 @@ public class JunitTest {
 
     @Test
     public void getCodeEmailTemporalGratis(){
-        String email = "presenteappqa";
+        String email = "ejemplo";
         String dominio = "dayrep.com";
         String mensajeValidate = "Solicitaste restablecer tu contraseña";
 
@@ -299,7 +299,7 @@ public class JunitTest {
                         System.out.println("Id del ultimo correo: " + lastMessageId);
 
                         // Construir la URL del mensaje específico
-                        String messageUrl = "https://www.emailtemporalgratis.com/email/dayrep.com/presenteappqa/message-" + lastMessageId + "/";
+                        String messageUrl = "https://www.emailtemporalgratis.com/email/"+dominio+"/"+email+"/message-" + lastMessageId + "/";
                         System.out.println("segunda URL: " + messageUrl);
 
                         // Hacer una nueva solicitud GET para obtener el contenido del mensaje
@@ -345,61 +345,6 @@ public class JunitTest {
                 e.printStackTrace();
             }
         }
-    }
-
-    @Test
-    public void borrar() {
-        int attempts = 2;
-        HttpResponse<String> secondResponse = null;
-
-        //obtener codigo OTP
-        HttpClient client = HttpClient.newHttpClient();
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create("https://codapi.online/sms-api/get-messages"))
-                .header("token", "ea8f1636-5103-52a0-bc91-b860cc860bd2")
-                .build();
-
-        HttpResponse<String> response = null;
-
-        for (int i = 0; i < attempts; ++i) {
-
-            try {
-                response = client.send(request, HttpResponse.BodyHandlers.ofString());
-                JSONArray json = new JSONArray(response.body());
-                JSONObject firstObject = json.getJSONObject(0);
-                String id = firstObject.getString("id");
-                String code = firstObject.getString("code");
-                String date = firstObject.getString("date");
-
-                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
-                LocalDateTime messageDate = LocalDateTime.parse(date, formatter);
-
-                System.out.println("hora del mensaje: " + messageDate);
-
-//                LocalDateTime targetDate =  LocalDateTime.now(ZoneId.of("GMT-4"));
-
-                // Instancia de LocalDateTime en UTC
-                LocalDateTime localDateTimeUtc = LocalDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
-                // Zona horaria GMT-4 (AST)
-                ZoneId zonaHorariaAst = ZoneId.of("GMT-4");
-                // Convierte LocalDateTime en ZonedDateTime en UTC
-                ZonedDateTime zonedDateTimeUtc = ZonedDateTime.of(localDateTimeUtc, ZoneOffset.UTC);
-                // Cambia la zona horaria a GMT-4 (AST)
-                ZonedDateTime zonedDateTimeAst = zonedDateTimeUtc.withZoneSameInstant(zonaHorariaAst);
-                // Obtiene el LocalDateTime en GMT-4
-                LocalDateTime targetDate = zonedDateTimeAst.toLocalDateTime();
-
-                System.out.println("Hora objetivo: " + targetDate);
-
-                if (messageDate.isEqual(targetDate) || messageDate.isAfter(targetDate)) {
-                    break;
-                }
-
-            } catch (IOException | InterruptedException e) {
-                throw new RuntimeException(e);
-            }
-        }
-
     }
 
 
