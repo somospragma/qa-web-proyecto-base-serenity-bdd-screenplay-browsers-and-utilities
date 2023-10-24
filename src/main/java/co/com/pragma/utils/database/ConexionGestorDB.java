@@ -1,4 +1,4 @@
-package co.com.pragma.utils.data;
+package co.com.pragma.utils.database;
 
 import java.sql.Connection;
 import java.sql.DriverManager;

@@ -1,4 +1,4 @@
-package co.com.pragma.utils;
+package co.com.pragma.utils.constants;
 
 public class AppProperties {
 

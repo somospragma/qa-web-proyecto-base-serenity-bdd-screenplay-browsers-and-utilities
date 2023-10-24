@@ -1,4 +1,4 @@
-package co.com.pragma.utils;
+package co.com.pragma.utils.google_apis;
 
 
 import com.google.api.client.auth.oauth2.Credential;

@@ -1,7 +1,7 @@
 package co.com.pragma.models;
 
-import co.com.pragma.utils.GoogleSheetsReader;
-import co.com.pragma.utils.UtilConstants;
+import co.com.pragma.utils.google_apis.GoogleSheetsReader;
+import co.com.pragma.utils.constants.UtilConstants;
 import lombok.Data;
 
 import java.io.IOException;

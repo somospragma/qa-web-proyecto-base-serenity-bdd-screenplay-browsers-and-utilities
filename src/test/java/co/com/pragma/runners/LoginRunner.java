@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 
 @CucumberOptions(
         features = "src/test/resources/features",
-        tags = "@LoginSuccessFul",
+        tags = "@LoginUnSuccessFul",
         glue = "co.com.pragma.stepdefinitions",
         snippets = CucumberOptions.SnippetType.CAMELCASE
 )

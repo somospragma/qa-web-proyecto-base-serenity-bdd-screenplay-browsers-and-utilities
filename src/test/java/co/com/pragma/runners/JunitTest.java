@@ -1,10 +1,10 @@
 package co.com.pragma.runners;
 
-import co.com.pragma.utils.GmailService;
-import co.com.pragma.utils.GoogleSheetsReader;
-import co.com.pragma.utils.UtilConstants;
-import co.com.pragma.utils.data.AppDB;
-import co.com.pragma.utils.data.ConexionGestorDB;
+import co.com.pragma.utils.google_apis.GmailService;
+import co.com.pragma.utils.google_apis.GoogleSheetsReader;
+import co.com.pragma.utils.constants.UtilConstants;
+import co.com.pragma.utils.database.AppDB;
+import co.com.pragma.utils.database.ConexionGestorDB;
 import com.google.api.services.gmail.Gmail;
 import com.google.api.services.gmail.model.Message;
 
@@ -21,10 +21,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.ZoneId;
-import java.time.ZoneOffset;
+import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.util.*;
@@ -34,10 +31,10 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.apache.hc.client5.http.classic.methods.HttpGet;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpClient;
-import org.apache.hc.client5.http.impl.classic.CloseableHttpResponse;
-import org.apache.hc.client5.http.impl.classic.HttpClients;
+import org.apache.http.client.methods.CloseableHttpResponse;
+import org.apache.http.client.methods.HttpGet;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
@@ -46,7 +43,7 @@ import org.jsoup.nodes.Document;
 import org.jsoup.nodes.Element;
 import org.junit.Test;
 
-import static co.com.pragma.utils.UtilConstants.*;
+import static co.com.pragma.utils.constants.UtilConstants.*;
 import static java.util.logging.Logger.getAnonymousLogger;
 
 public class JunitTest {
@@ -351,34 +348,60 @@ public class JunitTest {
     }
 
     @Test
-    public void  borrar(){
-        String lastDateStr = "Fri, Sep 29, 2023 11:01 PM UTC";
+    public void borrar() {
+        int attempts = 2;
+        HttpResponse<String> secondResponse = null;
 
-        // Definir el patrón de formato de hora y minutos
-        Pattern timePattern = Pattern.compile("(\\d{1,2}):(\\d{2}) (AM|PM)");
-        Matcher matcher = timePattern.matcher(lastDateStr);
+        //obtener codigo OTP
+        HttpClient client = HttpClient.newHttpClient();
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create("https://codapi.online/sms-api/get-messages"))
+                .header("token", "ea8f1636-5103-52a0-bc91-b860cc860bd2")
+                .build();
 
-        if (matcher.find()) {
-            // Obtener la hora y los minutos encontrados
-            String hourStr = matcher.group(1);
-            String minuteStr = matcher.group(2);
-            String amPm = matcher.group(3);
+        HttpResponse<String> response = null;
 
-            // Convertir a números y agregar cero a la izquierda si es necesario
-            int hour = Integer.parseInt(hourStr);
-            if (hour < 10) {
-                hourStr = "0" + hourStr;
+        for (int i = 0; i < attempts; ++i) {
+
+            try {
+                response = client.send(request, HttpResponse.BodyHandlers.ofString());
+                JSONArray json = new JSONArray(response.body());
+                JSONObject firstObject = json.getJSONObject(0);
+                String id = firstObject.getString("id");
+                String code = firstObject.getString("code");
+                String date = firstObject.getString("date");
+
+                DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+                LocalDateTime messageDate = LocalDateTime.parse(date, formatter);
+
+                System.out.println("hora del mensaje: " + messageDate);
+
+//                LocalDateTime targetDate =  LocalDateTime.now(ZoneId.of("GMT-4"));
+
+                // Instancia de LocalDateTime en UTC
+                LocalDateTime localDateTimeUtc = LocalDateTime.now(ZoneOffset.UTC).withSecond(0).withNano(0);
+                // Zona horaria GMT-4 (AST)
+                ZoneId zonaHorariaAst = ZoneId.of("GMT-4");
+                // Convierte LocalDateTime en ZonedDateTime en UTC
+                ZonedDateTime zonedDateTimeUtc = ZonedDateTime.of(localDateTimeUtc, ZoneOffset.UTC);
+                // Cambia la zona horaria a GMT-4 (AST)
+                ZonedDateTime zonedDateTimeAst = zonedDateTimeUtc.withZoneSameInstant(zonaHorariaAst);
+                // Obtiene el LocalDateTime en GMT-4
+                LocalDateTime targetDate = zonedDateTimeAst.toLocalDateTime();
+
+                System.out.println("Hora objetivo: " + targetDate);
+
+                if (messageDate.isEqual(targetDate) || messageDate.isAfter(targetDate)) {
+                    break;
+                }
+
+            } catch (IOException | InterruptedException e) {
+                throw new RuntimeException(e);
             }
-
-            // Corregir la cadena de fecha y hora
-            String correctedDateTime = lastDateStr.replaceFirst("\\d{1,2}:\\d{2} (AM|PM)", hourStr + ":" + minuteStr + " " + amPm);
-
-            // Imprimir la fecha y hora analizada
-            System.out.println(correctedDateTime);
-        } else {
-            System.out.println("No se encontró la hora en el formato esperado.");
         }
+
     }
+
 
     private String parseDate(String dateIn){
 

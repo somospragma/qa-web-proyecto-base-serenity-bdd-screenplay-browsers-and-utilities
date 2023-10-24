@@ -1,4 +1,4 @@
-package co.com.pragma.utils;
+package co.com.pragma.utils.constants;
 
 import java.io.BufferedReader;
 import java.io.FileInputStream;

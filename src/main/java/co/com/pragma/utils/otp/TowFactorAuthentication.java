@@ -1,4 +1,4 @@
-package co.com.pragma.utils;
+package co.com.pragma.utils.otp;
 
 import org.jboss.aerogear.security.otp.Totp;
 
