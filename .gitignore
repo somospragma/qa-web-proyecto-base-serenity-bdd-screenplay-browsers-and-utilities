@@ -87,6 +87,8 @@ fabric.properties
 
 build/
 
+logs/
+
 target/
 
 # Reason: https://github.com/joeblau/gitignore.io/issues/186#issuecomment-249601023

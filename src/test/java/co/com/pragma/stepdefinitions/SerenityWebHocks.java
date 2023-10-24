@@ -3,15 +3,13 @@ package co.com.pragma.stepdefinitions;
 import io.cucumber.java.Before;
 import io.cucumber.java.ParameterType;
 
-import io.github.bonigarcia.wdm.WebDriverManager;
-import net.serenitybdd.core.environment.EnvironmentSpecificConfiguration;
 import net.serenitybdd.screenplay.Actor;
 import net.serenitybdd.screenplay.abilities.BrowseTheWeb;
 import net.serenitybdd.screenplay.actors.OnStage;
 import net.serenitybdd.screenplay.actors.OnlineCast;
-import net.thucydides.core.annotations.Managed;
-import net.thucydides.core.environment.SystemEnvironmentVariables;
-import net.thucydides.core.util.EnvironmentVariables;
+
+import net.thucydides.model.environment.SystemEnvironmentVariables;
+import net.thucydides.model.util.EnvironmentVariables;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.chrome.ChromeOptions;
@@ -22,8 +20,6 @@ import org.openqa.selenium.firefox.FirefoxOptions;
 
 import java.util.Arrays;
 import java.util.List;
-
-import static net.thucydides.core.webdriver.ThucydidesWebDriverSupport.getProxiedDriver;
 
 
 public class SerenityWebHocks {
@@ -40,10 +36,32 @@ public class SerenityWebHocks {
         EdgeOptions edgeOptions = new EdgeOptions();
         FirefoxOptions firefoxOptions = new FirefoxOptions();
 
-        String resolution = variables.getProperty("webdriver.resolution");
+        String resolution = "1920,1080";
+        String headless = "false";
+        String driverSelected = "chrome";
+        try {
+                resolution = variables.getProperty("webdriver.resolution");
+                if (!resolution.contentEquals(","))
+                    resolution = "1920,1080";
 
-        if (resolution == null || !resolution.contentEquals(","))
-            resolution = "1920,1080";
+        }catch (NullPointerException e){
+            System.out.println("Resolución no indicada, se usara por defecto 1920,1080");
+        }
+        try {
+             headless = variables.getProperty("webdriver.headless");
+            if (headless.equals("true")) {
+                chromeOptions.addArguments("headless");
+                edgeOptions.addArguments("headless");
+                firefoxOptions.addArguments("-headless");
+            }
+        }catch (NullPointerException e){
+            System.out.println("headless no indicado, se usara por defecto FALSE");
+        }
+        try {
+                driverSelected = variables.getProperty("webdriver.driver");
+        }catch (NullPointerException e){
+            System.out.println("driver no indicado, se usara por defecto Chrome");
+        }
 
         List<String> argsGeneral = Arrays.asList(
                 "window-size=" + resolution,
@@ -60,13 +78,7 @@ public class SerenityWebHocks {
                 "disable-extensions",
                 "remote-allow-origins=*");
 
-        if (variables.getProperty("webdriver.headless").equals("true")) {
-            chromeOptions.addArguments("headless");
-            edgeOptions.addArguments("headless");
-            firefoxOptions.addArguments("-headless");
-        }
-
-        switch (variables.getProperty("webdriver.driver").toLowerCase()) {
+        switch (driverSelected.toLowerCase()) {
             case "edge":
                 edgeOptions.addArguments(argsGeneral);
                 driver = new EdgeDriver(edgeOptions);
@@ -76,16 +88,11 @@ public class SerenityWebHocks {
                 driver = new ChromeDriver(chromeOptions);
                 break;
             case "firefox":
-                // firefoxOptions.addArguments(argsGeneral);
                 firefoxOptions.addArguments("--allow-origins");
                 firefoxOptions.addArguments("--width=" + resolution.split(",")[0]);
                 firefoxOptions.addArguments("--height=" + resolution.split(",")[1]);
-
                 driver = new FirefoxDriver(firefoxOptions);
                 break;
-            default:
-                chromeOptions.addArguments(argsGeneral);
-                driver = new ChromeDriver(chromeOptions);
         }
     }
 

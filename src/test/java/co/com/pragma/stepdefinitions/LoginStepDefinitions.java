@@ -4,12 +4,14 @@ import co.com.pragma.models.GoogleUser;
 import co.com.pragma.navigation.NavigateTo;
 import co.com.pragma.tasks.Login;
 import co.com.pragma.userinterfaces.pragma.LoginPage;
-import co.com.pragma.utils.TowFactorAuthentication;
+import co.com.pragma.utils.otp.TowFactorAuthentication;
 
 import io.cucumber.java.en.Given;
 import io.cucumber.java.en.Then;
 import io.cucumber.java.en.When;
 
+import net.serenitybdd.screenplay.actions.Click;
+import net.serenitybdd.screenplay.actions.Enter;
 import net.serenitybdd.screenplay.waits.WaitUntil;
 
 
@@ -52,11 +54,27 @@ public class LoginStepDefinitions {
 
     }
 
+    @When("ingresa las credenciales incorrectas del registro {int} de Google Sheets")
+    public void ingreseSusCredencialesSheetnameAndRownumber(Integer rowNumber) {
+
+        actor.attemptsTo(
+                Click.on(LoginPage.BOTON_INICIO_SESION),
+                Enter.theValue(GoogleUser.ofGoogleSheetsRow(rowNumber).getCorreo()).into(LoginPage.CAMPO_CORREO),
+                Click.on(LoginPage.BOTON_SIGUIENTE)
+        );
+
+    }
+
     @Then("el usuario visualiza el home de Mision Match")
     public void elUsuarioVisualizaElHomeOfPage() {
         actor.attemptsTo(
                 WaitUntil.the(LoginPage.ESCRITORIO_BTN, isVisible()).forNoMoreThan(15).seconds()
         );
+    }
+
+    @Then("no logra avanzar")
+    public void elUsuarioNoLograAvanzar() {
+        // aca algunas aserciones
     }
 
 

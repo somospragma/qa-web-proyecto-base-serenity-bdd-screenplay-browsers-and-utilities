@@ -5,37 +5,69 @@
 Proyecto de estandares de Automatización y utilidades con serenity bdd y screenplay
 
 ## Description
-This project aims to establish a standard base for test automation with different technologies such as Serenity Web under a Screenplay Pattern design, which can be used as a guide in different projects.
+Este proyecto ofrece un paquete de utilidades y esta configurado para ser ejecutado desde comandos.
+
+## Utilities
+Encontrara utilidades para:
+- Manejo de Bases de Datos
+- Manejo de constantes y configuraciones
+- Manejo de Apis de Google
+- Comparación de imágenes
 
 ## Consideraciones
-    - Para hacer uso de la funcionalidad de prueba que implementa la utilidad de Base de Datos es importante 
-    que se instacie una Base de datos y se configura en el archivo de configuración ubicado en:
-        ./src/main/resources/configs/congig.properties
+    - Para hacer uso de la la utilidad de Base de Datos es importante 
+        que se instacie una Base de datos y se configura en el archivo de configuración ubicado en:
 
+            ./src/main/resources/configs/congig.properties
+
+        En las dependencias del proyecto esta agregada la dependencia del driver de MySQL, si no 
+        desea realizar mayores ajustes respecto al motor de BD use MySQL. Si desea usar otro motor, 
+        adiciones la dependencia del driver al build.gradle y configure este driver como observa 
+        se realizo para MySQL en: 
+    
+            ./src/main/java/utils/data/ConnectionManagerDB.java
+        
+        Nota: Algunos motores de BD no requieren agregar la dependencia del driver como Oracle o MSserver
 
     - La funcionalidad de prueba que implementa la utilidad de manejo de documentos de Google Sheet hace uso
-    de un documento de Google Sheet ubicado en el drive de Pragma, las credenciasles del API de Google se encuentran
-    en: 
-        ./src/main/resources/credenciales.json
-    las cuales fueron generadas por un API de google creado bajo una cuenta de Pragma. Si desea ejecutar un documento tambien 
-    dentro del drive de Pragma solo cambie el ID del documento y cree un documento con 
-        |correo | contraseña | secret de google authenticator |
+        de un documento de Google Sheet ubicado en el drive de Pragma (enlace al final), las credenciasles del API de Google se encuentran
+        en: 
+            ./src/main/resources/credenciales.json
+    
+        las cuales fueron generadas por un API de google creado bajo una cuenta de Pragma. Si desea ejecutar un documento tambien 
+        dentro del drive de Pragma solo cambie el ID del documento en:
+            ./src/main/resources/configs/congig.properties
+        
+        y cree un documento con las siguientes columnas
+    
+            |correo | contraseña | secret de google authenticator |
     
     A su vez, el manejo de codigos de autenticacion de GoogleAuthenticator OTP tambien hace uso del documento de GoogleSheet,
-    por lo cual es importante exista el documento con la información de acceso.
+    por lo cual es importante exista el documento con la información de acceso. 
     De lo contrario solo use la implementacion dentro del feature Login.feature como un ejemplo
 
 
     Dadas las consideraciones anteriores, la implementacion de las utilidades solo se encuentran expuestas a modo 
     de ejemplo y unicamente funcionaran si se hacen las configuraciones pertinentes.
 
+-   [Documento de Google Sheet](https://docs.google.com/spreadsheets/d/1t2q5uJ1-rTwx0_AhS7mHKnaehTnLqGK8RR_I6ExZRHc/edit#gid=0)
 
 ## ✅ Technologies
 ### This project required:
-- [JDK java] version 11
-- [Serenity] version 
+- [JDK java] version 16
+- [Serenity] version 4
 - [Gradle] version
-- [Appium] version
+
+Nota: 
+*   Se requiere Selenium posterior a la version 4.11 para la descarga automatica de algunos drivers de los navegadores
+    La version de Serenity implementada (4.0.0) ya incluye Selenium 4.12 lo cual soporta los navegadores a Octubre del 2023
+    si el proyecto presenta problemas relacionados a las version del driver descargado de forma automatica y la version de su 
+    navegador vale la pena revisar que este trabajando con versiones recientes de Serenity y checkear las versiones de Selenium
+    incluidas en dicha version de Serenity
+*   Con Selenium Manager incluido en Serenity 4.0.0 ya no se requiere WebDriverManager de Boni Garcia, razon por la cual ya
+    serenity no lo incluye dentro de sus dependencias
+
+
 
 ## Project status
 <h4 align="center"> 🚧 Proyecto en construcción 🚧 </h4> 
@@ -62,10 +94,21 @@ gradle clean test --info --stacktrace --tests "ruta.nameRunner" -Dcontext=chrome
 gradle clean test -Dcucumber.options="--tags @someTag" -Dcontext=chrome -Dwebdriver.driver=chrome
 gradle clean test -Dcucumber.options="--tags '@someTag or @someTag'" -Dcontext=chrome -Dwebdriver.driver=chrome
 ```
+
+Nota:
+
+*   Si ejecuta en la consola de gradle no debe usar comillas simples '...' para encerrar '-Dwebdriver.driver=chrome'
+*   Si ejecuta en la consola estándar de la máquina quizás si deba utilizar '...' en las porciones del comando que incluyan puntos
+*   Con "./gradlew test ..." ejecuta el gradle compilado del proyecto
+*   Con "gradle test ..." ejecuta el gradle de su maquina, el configurado en las variables de entorno de su sistema operativo
+
+
 ### ejemplo
 ```
 ./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.CompareImageRunner" -Dcontext=chrome '-Dwebdriver.driver=chrome'
+./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" -Dcontext=chrome '-Dwebdriver.driver=chrome'
 ```
+
 
 ##  🛠️ Run tests Firefox gradle:
 ```
@@ -76,9 +119,6 @@ gradle clean test -Dcucumber.options="--tags '@someTag or @someTag'" -Dcontext=c
 ```
 ./gradlew clean test --info --stacktrace --tests "co.com.pragma.runners.LoginRunner" '-Dcontext=firefox -Dwebdriver.driver=firefox'
 ```
-
-
-cucumber.options might be cucumberOptions according to version
 
 ## **Run tests in different environments:**
 ```
