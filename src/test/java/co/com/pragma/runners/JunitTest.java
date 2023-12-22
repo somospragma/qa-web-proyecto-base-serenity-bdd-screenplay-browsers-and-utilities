@@ -10,12 +10,15 @@ import com.google.api.services.gmail.model.Message;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.URI;
 import java.net.http.HttpClient;
 import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
+import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
+import java.security.NoSuchProviderException;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -31,6 +34,8 @@ import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+import jakarta.mail.*;
+import jakarta.mail.internet.MimeMultipart;
 import org.apache.http.client.methods.CloseableHttpResponse;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.impl.client.CloseableHttpClient;
@@ -44,7 +49,7 @@ import org.jsoup.nodes.Element;
 import org.junit.Test;
 
 import static co.com.pragma.utils.constants.UtilConstants.*;
-import static java.util.logging.Logger.getAnonymousLogger;
+
 
 public class JunitTest {
 
@@ -63,7 +68,7 @@ public class JunitTest {
     }
 
     @Test
-    public void getGmailMessages() throws GeneralSecurityException, IOException, ParseException {
+    public void getGmailMessagesByAPI() throws GeneralSecurityException, IOException, ParseException {
         String DATE_FORMAT = "yyyy-MM-dd HH:mm";
         String SPECIFIED_DATE_STR = "2023-09-12 11:00";
         String MESSAGE_TO_VALIDATE = "no comparta";
@@ -85,6 +90,108 @@ public class JunitTest {
             System.out.println("No se encontraron mensajes.");
         }
     }
+
+    @Test
+    public void getGmailMessagesByIMAP(){
+        String host = "imap.gmail.com"; // Cambia según tu proveedor de correo
+        String username = "pruebas.qa.pragma@gmail.com"; // Tu dirección de correo electrónico
+        String password = "******"; // Tu contraseña de aplicación
+
+        Properties properties = new Properties();
+        properties.put("mail.store.protocol", "imaps");
+        properties.put("mail.imaps.host", host);
+        properties.put("mail.imaps.port", "993");
+        properties.put("mail.imaps.starttls.enable", "true");
+
+        try {
+            Session emailSession = Session.getDefaultInstance(properties);
+            Store store = emailSession.getStore("imaps");
+            store.connect(host, username, password);
+
+            Folder emailFolder = store.getFolder("INBOX");
+            emailFolder.open(Folder.READ_ONLY);
+
+            jakarta.mail.Message[] messages = emailFolder.getMessages();
+            if (messages.length > 0) {
+                jakarta.mail.Message lastMessage = messages[messages.length - 3];
+                System.out.println("Asunto: " + lastMessage.getSubject());
+                System.out.println("Fecha: " + lastMessage.getReceivedDate());
+
+                String content = getTextFromMessage(lastMessage);
+                System.out.println("Contenido: " + content);
+            }
+
+            emailFolder.close(false);
+            store.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    private static String getTextFromMessage(jakarta.mail.Message message) throws MessagingException, IOException {
+        if (message.isMimeType("multipart/*")) {
+            MimeMultipart mimeMultipart = (MimeMultipart) message.getContent();
+            return getTextFromMimeMultipart(mimeMultipart, new StringBuilder()).toString();
+        }else {
+            InputStream is = message.getInputStream();
+            InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(isr);
+            StringBuilder sb = new StringBuilder();
+            String line;
+            while ((line = reader.readLine()) != null) {
+                sb.append(line);
+            }
+            String textContent = sb.toString();
+
+            if(!textContent.contains("PNG")) {
+                return textContent;
+            }
+        }
+        return null;
+    }
+
+    private static StringBuilder getTextFromMimeMultipart(MimeMultipart mimeMultipart, StringBuilder builder) throws MessagingException, IOException {
+        int count = mimeMultipart.getCount();
+        for (int i = 0; i < count; i++) {
+            BodyPart bodyPart = mimeMultipart.getBodyPart(i);
+            Object partContent = bodyPart.getContent();
+
+            //System.out.println("parte " + i );
+            //System.out.println("tipo "+bodyPart.getContentType());
+
+            if (partContent instanceof MimeMultipart) {
+                // Manejar recursivamente las partes anidadas
+                builder = getTextFromMimeMultipart((MimeMultipart) partContent, builder);
+            }
+            else if (bodyPart.isMimeType("text/plain")) {
+                InputStream is = bodyPart.getInputStream();
+                InputStreamReader isr = new InputStreamReader(is, StandardCharsets.UTF_8);
+                BufferedReader reader = new BufferedReader(isr);
+                StringBuilder sb = new StringBuilder();
+                String line;
+                while ((line = reader.readLine()) != null) {
+                    sb.append(line);
+                }
+                String textContent = sb.toString();
+
+                if(!textContent.contains("PNG")) {
+                    builder.append(textContent);
+                }
+
+            }
+            else if (bodyPart.isMimeType("text/html")) {
+                // Manejar HTML
+                String html = (String) partContent;
+                Document doc = Jsoup.parse(html);
+                String text = doc.text();
+
+                builder.append(text);
+
+            }
+        }
+        return builder;
+    }
+
 
     @Test
     public void getDataSheet() throws GeneralSecurityException, IOException {
