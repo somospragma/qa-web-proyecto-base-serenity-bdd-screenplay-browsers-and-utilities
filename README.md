@@ -1,8 +1,35 @@
-# proyecto-base-serenity-bdd-screenplay-browsers-and-utilities
+<h1 align="center">
+  <br>
+  <a href="http://www.amitmerchant.com/electron-markdownify"><img src="https://f.hubspotusercontent20.net/hubfs/2829524/Copia%20de%20LOGOTIPO_original-2.png"></a>
+  <br>
+  proyecto-base-serenity-bdd-screenplay-browsers-and-utilities
+  <br>
+</h1>
+
+<h4 align="center">Proyecto base de <a href="https://github.com/karatelabs/karate" target="_blank">Pragma</a>.</h4>
 
 
-## Name
-Proyecto de estandares de Automatización y utilidades con serenity bdd y screenplay
+<p align="center">
+  <a href="https://www.oracle.com/java/technologies/javase-jdk16-downloads.html">
+    <img src="https://img.shields.io/badge/JDK_Java-16-orange.svg" alt="JDK Java 16">
+  </a>
+  <a href="https://serenity-bdd.info/">
+    <img src="https://img.shields.io/badge/Serenity-4-blueviolet.svg" alt="Serenity 4">
+  </a>
+  <a href="https://gradle.org/releases/">
+    <img src="https://img.shields.io/badge/Gradle-latest_version-green.svg" alt="Gradle Last Version">
+  </a>
+  <a href="https://docs.oracle.com/javase/8/docs/technotes/guides/jdbc/">
+    <img src="https://img.shields.io/badge/SQL-JDBC-blue.svg" alt="SQL JDBC">
+  </a>
+  <a href="https://developers.google.com/api-client-library">
+    <img src="https://img.shields.io/badge/Google_APIs-Services-red.svg" alt="Google APIs">
+  </a>
+  <a href="https://github.com/romankh3/image-comparison">
+    <img src="https://img.shields.io/badge/romankh3:image--comparison-4.4.0-yellow.svg" alt="romankh3:image-comparison:4.4.0">
+  </a>
+</p>
+
 
 ## Description
 Este proyecto ofrece un paquete de utilidades y esta configurado para ser ejecutado desde comandos.
@@ -67,25 +94,6 @@ Nota:
 *   Con Selenium Manager incluido en Serenity 4.0.0 ya no se requiere WebDriverManager de Boni Garcia, razon por la cual ya
     serenity no lo incluye dentro de sus dependencias
 
-
-
-## Project status
-<h4 align="center"> 🚧 Proyecto en construcción 🚧 </h4> 
-
-## Usage
-Use examples liberally, and show the expected output if you can. It's helpful to have inline the smallest example of usage that you can demonstrate, while providing links to more sophisticated examples if they are too long to reasonably include in the README.
-
-## 📁 Access to project
-
-- [ ] [Create](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#create-a-file) or [upload](https://docs.gitlab.com/ee/user/project/repository/web_editor.html#upload-a-file) files
-- [ ] [Add files using the command line](https://docs.gitlab.com/ee/gitlab-basics/add-file.html#add-a-file-using-the-command-line) or push an existing Git repository with the following command:
-
-```
-cd existing_repo
-git remote add origin https://gitlab.com/calidad_de_software/framework-actions-automation.git
-git branch -M develop
-git push -uf origin develop
-```
 
 ##  🛠️ Run tests Chrome gradle:
 ```
@@ -152,35 +160,6 @@ To use this implementation in your projects, you need to create the following fo
 1. create this path : /resources/data/screenshot - in this route you will be able to save the screenshot took by utility class called *ScreenshotProvider*.
 2. in  /resources/data/ : in this path you will be able to save your image to test the scenarios in *compare_image.feature*
 3. You need to create this path : /resources/results - to save the results of image comparison Task 
-
-
-
-
-## Collaborate with your team
-
-- [ ] [Invite team members and collaborators](https://docs.gitlab.com/ee/user/project/members/)
-- [ ] [Create a new merge request](https://docs.gitlab.com/ee/user/project/merge_requests/creating_merge_requests.html)
-- [ ] [Automatically close issues from merge requests](https://docs.gitlab.com/ee/user/project/issues/managing_issues.html#closing-issues-automatically)
-- [ ] [Enable merge request approvals](https://docs.gitlab.com/ee/user/project/merge_requests/approvals/)
-- [ ] [Automatically merge when pipeline succeeds](https://docs.gitlab.com/ee/user/project/merge_requests/merge_when_pipeline_succeeds.html)
-
-## Test and Deploy
-
-Use the built-in continuous integration in GitLab.
-
-- [ ] [Get started with GitLab CI/CD](https://docs.gitlab.com/ee/ci/quick_start/index.html)
-- [ ] [Analyze your code for known vulnerabilities with Static Application Security Testing(SAST)](https://docs.gitlab.com/ee/user/application_security/sast/)
-- [ ] [Deploy to Kubernetes, Amazon EC2, or Amazon ECS using Auto Deploy](https://docs.gitlab.com/ee/topics/autodevops/requirements.html)
-- [ ] [Use pull-based deployments for improved Kubernetes management](https://docs.gitlab.com/ee/user/clusters/agent/)
-- [ ] [Set up protected environments](https://docs.gitlab.com/ee/ci/environments/protected_environments.html)
-
-***
-
-## Support
-Tell people where they can go to for help. It can be any combination of an issue tracker, a chat room, an email address, etc.
-
-## Roadmap
-If you have ideas for releases in the future, it is a good idea to list them in the README.
 
 ## Authors and acknowledgment
 
