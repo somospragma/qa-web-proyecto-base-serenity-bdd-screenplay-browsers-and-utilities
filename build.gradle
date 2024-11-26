@@ -88,6 +88,9 @@ dependencies {
         exclude group: 'io.netty', module: 'netty-all'
     }
 
+    //PDF
+    implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.12'
+
 
 }
 test {
@@ -104,6 +107,17 @@ tasks.withType(Test) {
 wrapper {
     gradleVersion = '7.4.1'
 }
+
+
+// Tarea para ejecutar creación de archivos pdf con evidencia con cada caso de prueba
+task ejecutarPDFCreator(type: JavaExec) {
+    main = 'co/com/pragma/utils/reports_pdf/GenerarEvidenciasEnPDF'
+    classpath = sourceSets.test.runtimeClasspath
+    doLast {
+        println 'Reportes Creados en PDF Exitoso.'
+    }
+}
+aggregate.finalizedBy ejecutarPDFCreator
 
 gradle.startParameter.continueOnFailure = true
 test.finalizedBy(aggregate, reports)
