@@ -40,6 +40,7 @@ Encontrara utilidades para:
 - Manejo de constantes y configuraciones
 - Manejo de Apis de Google
 - Comparación de imágenes
+- Creación de reportes PDF
 
 ## Consideraciones
     - Para hacer uso de la la utilidad de Base de Datos es importante 
@@ -72,7 +73,10 @@ Encontrara utilidades para:
     A su vez, el manejo de codigos de autenticacion de GoogleAuthenticator OTP tambien hace uso del documento de GoogleSheet,
     por lo cual es importante exista el documento con la información de acceso. 
     De lo contrario solo use la implementacion dentro del feature Login.feature como un ejemplo
-
+    
+    - Para hacer uso de la funcionalidad de creación de reportes PDF es necesario realizar la importación de la dependencia itextpdf
+    la cual pueden encontrar en el build.gradle con el comentario de PDF. Sumado a esto se debe crear una tarea la cual ejecute esta
+    tarea al finalizar las ejecuciones de los casos de pruebas, la cual se llama ejecutarPDFCreator y también esta el build.gradle
 
     Dadas las consideraciones anteriores, la implementacion de las utilidades solo se encuentran expuestas a modo 
     de ejemplo y unicamente funcionaran si se hacen las configuraciones pertinentes.
